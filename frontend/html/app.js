@@ -1,5 +1,5 @@
 // ==================== 1. ตั้งค่า API Endpoint ====================
-const API_BASE_URL = 'https://dismatch-api.onrender.com';
+const API_BASE_URL = 'https://dismatch.onrender.com';
 
 // ==================== 2. ระบบคลังรูปภาพอาหาร ====================
 const foodImageMap = {

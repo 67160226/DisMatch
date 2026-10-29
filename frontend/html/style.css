@@ -1,0 +1,970 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap');
+
+:root {
+  /* 🎨 โทนสีเข้มเบอร์กันดี / ดำมาเจนต้า ตามรูปภาพ */
+  --bg-dark-start: #0c0006;
+  --bg-dark-mid: #6b002c;
+  --bg-dark-end: #120009;
+  
+  --card-bg: rgba(26, 4, 16, 0.92);
+  --card-border: #4a0d2a;
+  
+  --text-main: #ffffff;
+  --text-muted: #d8a8c4;
+  
+  --primary: #ff1a75;
+  --primary-hover: #ff4d94;
+  --primary-soft: rgba(255, 26, 117, 0.18);
+  
+  --accent: #e6005c;
+  --accent-hover: #ff3385;
+  
+  --secondary: #1a0512;
+  --secondary-hover: #2e0920;
+  
+  --success: #2ed573;
+  --danger: #ff4757;
+  --danger-soft: rgba(255, 71, 87, 0.2);
+  
+  --border: #4a0d2a;
+  --input-bg: #12020b;
+  --radius: 20px;
+  --shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(107, 0, 44, 0.35);
+  
+  --gradient-bg: linear-gradient(135deg, var(--bg-dark-start) 0%, var(--bg-dark-mid) 50%, var(--bg-dark-end) 100%);
+  --gradient-primary: linear-gradient(135deg, #e6005c 0%, #99003d 100%);
+  --gradient-accent: linear-gradient(135deg, #ff1a75 0%, #e6005c 100%);
+  --gradient-like: linear-gradient(135deg, #2ed573 0%, #10b981 100%);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "IBM Plex Sans Thai", "Noto Sans Thai", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-main);
+  background: var(--gradient-bg);
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { width: 100%; max-width: 480px; padding: 24px; }
+.hidden { display: none !important; }
+
+:focus-visible { outline: 3px solid rgba(255, 26, 117, .5); outline-offset: 2px; }
+
+/* ==================== Cards ==================== */
+.auth-card, .card, .randomizer-card, .manage-food-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.auth-card { padding: 36px 32px; width: 100%; max-width: 440px; }
+.card, .randomizer-card, .manage-food-card { padding: 28px; }
+
+/* ==================== CS:GO Case Opener Roulette Style ==================== */
+.csgo-wrapper {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  background: #0a0106;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+  margin: 16px 0;
+}
+
+.csgo-pointer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  background: #ff1a75;
+  z-index: 10;
+  transform: translateX(-50%);
+  box-shadow: 0 0 15px #ff1a75, 0 0 5px #ffffff;
+}
+
+.csgo-pointer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 10px solid #ff1a75;
+}
+
+.csgo-pointer::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 10px solid #ff1a75;
+}
+
+.csgo-track {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+}
+
+.csgo-item-placeholder {
+  width: 100%;
+  text-align: center;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.csgo-item {
+  flex: 0 0 110px;
+  width: 110px;
+  height: 96px;
+  margin: 0 5px;
+  background: #1f0515;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  padding: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  user-select: none;
+  position: relative;
+  border-bottom: 4px solid var(--accent);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.csgo-item.winner {
+  border-color: #2ed573 !important;
+  transform: scale(1.08);
+  box-shadow: 0 0 25px rgba(46, 213, 115, 0.9);
+  z-index: 5;
+}
+
+.csgo-item.rarity-0 { border-bottom-color: #4b69ff; }
+.csgo-item.rarity-1 { border-bottom-color: #8847ff; }
+.csgo-item.rarity-2 { border-bottom-color: #d32ce6; }
+.csgo-item.rarity-3 { border-bottom-color: #ff1a75; }
+.csgo-item.rarity-4 { border-bottom-color: #ffd700; }
+
+/* ==================== Register & Forms ==================== */
+.brand { text-align: center; margin-bottom: 24px; }
+
+.brand-logo {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px;
+  display: grid;
+  place-items: center;
+  font-size: 36px;
+  background: var(--primary-soft);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(255, 26, 117, 0.25);
+}
+
+.brand h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; color: var(--text-main); }
+.muted { color: var(--text-muted); font-size: 14px; }
+
+#register-form { display: flex; flex-direction: column; gap: 12px; }
+
+label { font-size: 14px; font-weight: 600; margin-top: 4px; color: var(--text-muted); }
+.form-group { width: 100%; }
+
+input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text-main);
+  font-size: 16px;
+  font-family: inherit;
+  transition: border-color .15s, box-shadow .15s;
+}
+input::placeholder { color: #8a5c78; }
+input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255, 26, 117, .25); }
+
+.password-wrap { position: relative; width: 100%; }
+.password-wrap input { padding-right: 48px; }
+
+.toggle-pw {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+.toggle-pw:hover { background: var(--primary-soft); }
+
+.hint { font-size: 13px; color: var(--text-muted); line-height: 1.4; margin-top: -4px; }
+
+.alert {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  background: var(--danger-soft);
+  border: 1px solid var(--danger);
+  color: #ff99a8;
+}
+.alert.success { background: rgba(46, 213, 115, 0.15); border-color: var(--success); color: #7bed9f; }
+.alert[hidden] { display: none; }
+
+/* ==================== Buttons ==================== */
+.btn, .btn-primary, .btn-secondary {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.btn { flex: 1; }
+
+.btn-primary { 
+  background: var(--gradient-primary); 
+  color: #fff; 
+  width: 100%; 
+  margin-top: 10px;
+  box-shadow: 0 4px 20px rgba(230, 0, 92, 0.45);
+}
+.btn-primary:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0 6px 25px rgba(230, 0, 92, 0.6); 
+}
+
+.btn-secondary { 
+  background: var(--secondary); 
+  color: var(--text-main); 
+  border: 1.5px solid var(--border); 
+}
+.btn-secondary:hover { 
+  background: var(--secondary-hover); 
+  border-color: var(--primary); 
+  color: var(--primary);
+}
+
+.btn-warning { 
+  background: var(--gradient-accent); 
+  color: #fff; 
+  box-shadow: 0 4px 20px rgba(255, 26, 117, 0.45);
+}
+.btn-warning:hover { 
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(255, 26, 117, 0.6);
+}
+
+.btn-dark { 
+  background: #1a0512; 
+  color: var(--text-main); 
+  border: 1.5px solid var(--border); 
+}
+.btn-dark:hover { 
+  background: var(--primary-soft); 
+  color: var(--primary); 
+  border-color: var(--primary); 
+}
+
+.btn-success {
+  background: var(--gradient-primary);
+  color: #fff;
+  flex: 0 0 52px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(230, 0, 92, 0.4);
+}
+.btn-success:hover { 
+  transform: scale(1.05); 
+}
+
+.btn-large { width: 100%; font-size: 18px; min-height: 54px; }
+
+.switch { text-align: center; font-size: 15px; color: var(--text-muted); margin-top: 24px; }
+.switch a, a { color: var(--primary); text-decoration: none; font-weight: 600; }
+.switch a:hover, a:hover { text-decoration: underline; }
+
+/* ==================== Dashboard ==================== */
+.app-dashboard { display: flex; flex-direction: column; gap: 20px; }
+
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; }
+.user-info { display: flex; align-items: center; gap: 12px; }
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  background: var(--primary-soft);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(255, 26, 117, 0.2);
+}
+
+.greeting { font-size: 13px; color: var(--text-muted); line-height: 1.2; }
+.user-info h3 { font-size: 18px; font-weight: 700; color: var(--text-main); }
+
+.btn-logout {
+  background: #1f0414;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+}
+.btn-logout:hover { color: var(--danger); border-color: var(--danger); background: var(--danger-soft); }
+
+.randomizer-card { 
+  text-align: center; 
+  border-top: 5px solid var(--primary); 
+}
+.randomizer-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; }
+
+.result-box {
+  background: #14020c;
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+#result-text { font-size: 20px; color: var(--primary); font-weight: 700; }
+
+.add-food-wrapper { display: flex; gap: 10px; margin-bottom: 24px; }
+
+.food-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  margin-bottom: 4px;
+  border-bottom: 1.5px solid var(--border);
+}
+.food-list-header h3 { font-size: 16px; font-weight: 700; }
+
+.badge {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border: 1px solid var(--border);
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.item-list { list-style: none; max-height: 320px; overflow-y: auto; }
+.item-list::-webkit-scrollbar { width: 6px; }
+.item-list::-webkit-scrollbar-thumb { background: #5e0d34; border-radius: 10px; }
+
+.item-list li {
+  padding: 12px 6px;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.item-list li:last-child { border-bottom: 0; }
+
+/* ==================== Food Matcher (Tinder Swipe Style) ==================== */
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.header h2 { font-size: 20px; font-weight: 700; }
+.header h2 span { color: var(--primary); letter-spacing: 1px; font-weight: 700; }
+
+.card-container { display: flex; flex-direction: column; align-items: center; margin: 10px 0 20px; }
+
+.food-card {
+  width: 100%;
+  max-width: 330px;
+  height: 380px;
+  background-color: var(--card-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid var(--border);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(230, 0, 92, 0.3);
+  text-align: center;
+  padding: 28px 20px;
+  transition: transform .25s ease, box-shadow .25s ease;
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+  will-change: transform;
+}
+
+.food-card:active { cursor: grabbing; }
+
+.food-card.swipe-right {
+  transform: translateX(150%) rotate(30deg) !important;
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease !important;
+}
+
+.food-card.swipe-left {
+  transform: translateX(-150%) rotate(-30deg) !important;
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease !important;
+}
+
+.food-card.has-image::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(12, 0, 6, 0.6) 50%, rgba(12, 0, 6, 0.95) 100%);
+  z-index: 1;
+}
+
+.food-card h1 { 
+  position: relative;
+  z-index: 2;
+  font-size: 30px; 
+  font-weight: 700; 
+  color: #ffffff; 
+  word-break: break-word; 
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+}
+
+.action-buttons { margin-top: 24px; display: flex; gap: 16px; width: 100%; max-width: 330px; }
+
+.btn-like, .btn-dislike {
+  flex: 1;
+  min-height: 56px;
+  padding: 0 20px;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all .2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+}
+
+.btn-like { 
+  background: var(--gradient-like); 
+  color: #fff; 
+  box-shadow: 0 4px 20px rgba(46, 213, 115, 0.4); 
+}
+.btn-like:hover { 
+  transform: translateY(-3px) scale(1.02); 
+  box-shadow: 0 6px 25px rgba(46, 213, 115, 0.55); 
+}
+
+.btn-dislike { 
+  background: #1c0312; 
+  color: var(--danger); 
+  border: 2px solid var(--danger); 
+}
+.btn-dislike:hover { 
+  background: var(--danger-soft); 
+  transform: translateY(-3px) scale(1.02); 
+}
+
+/* ==================== Instant Match Overlay Screen (Tinder Style) ==================== */
+.instant-match-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(12, 0, 6, 0.96) 0%, rgba(107, 0, 44, 0.96) 100%);
+  backdrop-filter: blur(16px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  padding: 24px;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.match-content {
+  background: #1a0410;
+  border: 1.5px solid var(--border);
+  width: 100%;
+  max-width: 380px;
+  padding: 32px 24px;
+  border-radius: 28px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 26, 117, 0.4);
+  animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.badge-match {
+  display: inline-block;
+  background: var(--primary-soft);
+  color: var(--primary);
+  border: 1px solid var(--border);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 2px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.match-heading {
+  font-size: 32px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 6px;
+  text-shadow: 0 0 15px rgba(255, 26, 117, 0.5);
+}
+
+.match-sub {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.match-image-box {
+  width: 100%;
+  height: 220px;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+  display: flex;
+  align-items: flex-end;
+  border: 1px solid var(--border);
+}
+
+.match-image-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(10, 0, 5, 0.95) 100%);
+}
+
+.match-food-title {
+  position: relative;
+  z-index: 2;
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 700;
+  padding: 16px;
+  width: 100%;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+/* ==================== Top Vote Shortcut Button ==================== */
+.top-vote-shortcut {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  background: linear-gradient(135deg, #e6005c 0%, #ff1a75 100%);
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 6px 25px rgba(230, 0, 92, 0.6);
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.top-vote-shortcut:hover {
+  transform: scale(1.06);
+  box-shadow: 0 8px 30px rgba(230, 0, 92, 0.8);
+}
+
+@keyframes popUp {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0) translateY(-20px); opacity: 0; }
+  80% { transform: scale(1.1) translateY(0); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 16px 12px; }
+  .auth-card, .auth-minimal { padding: 28px 20px; }
+  .card, .randomizer-card, .manage-food-card { padding: 20px; }
+}
+
+/* ==================== Top-Left Brand Logo Bar ==================== */
+.app-brand-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand-logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 10px;
+  filter: drop-shadow(0 0 8px rgba(255, 26, 117, 0.6));
+  transition: transform 0.2s ease;
+}
+
+.brand-logo-img:hover {
+  transform: scale(1.08) rotate(-5deg);
+}
+
+.brand-title {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #ff1a75 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 10px rgba(255, 26, 117, 0.3);
+}
+
+/* ==================== Modal & Login Card (DishMatch Dark Theme) ==================== */
+/* พื้นหลังแบบเบลอหลัง Modal */
+body.blur-bg {
+    background: var(--gradient-bg);
+    background-attachment: fixed;
+    font-family: "IBM Plex Sans Thai", "Noto Sans Thai", system-ui, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(12, 0, 6, 0.78);
+    backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 16px;
+}
+
+/* การ์ด Pop-up สไตล์ Dark Glassmorphism */
+.login-card {
+    position: relative;
+    background: var(--card-bg, rgba(26, 4, 16, 0.94));
+    width: 100%;
+    max-width: 420px;
+    border-radius: var(--radius, 20px);
+    border: 1px solid var(--border, #4a0d2a);
+    padding: 36px 30px 28px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 35px rgba(255, 26, 117, 0.25);
+    backdrop-filter: blur(16px);
+    box-sizing: border-box;
+    overflow: hidden;
+    color: var(--text-main, #ffffff);
+}
+
+/* แถบ Gradient ด้านบนสุดของการ์ด */
+.top-accent-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #ff1a75 0%, #ff4d94 50%, #e6005c 100%);
+    box-shadow: 0 0 15px rgba(255, 26, 117, 0.6);
+}
+
+/* ปุ่มปิด (✕) */
+.close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: var(--text-muted, #d8a8c4);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    background: var(--danger, #ff4757);
+    border-color: var(--danger, #ff4757);
+    color: #ffffff;
+    transform: rotate(90deg);
+}
+
+/* หัวการ์ด */
+.card-header {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.icon-badge {
+    width: 52px;
+    height: 52px;
+    background: var(--primary-soft, rgba(255, 26, 117, 0.18));
+    border: 1.5px solid var(--border, #4a0d2a);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    font-size: 24px;
+    box-shadow: 0 4px 18px rgba(255, 26, 117, 0.3);
+}
+
+.card-header h2 {
+    margin: 0 0 6px;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-main, #ffffff);
+    letter-spacing: -0.3px;
+}
+
+.card-header .subtitle {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--text-muted, #d8a8c4);
+}
+
+/* ปุ่ม Google Login ธีมมืดหรูหรา */
+.btn-google {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1.5px solid rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-size: 14.5px;
+    font-weight: 600;
+    font-family: inherit;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-google:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--primary, #ff1a75);
+    box-shadow: 0 0 18px rgba(255, 26, 117, 0.28);
+    transform: translateY(-1px);
+}
+
+/* เส้นแบ่ง "หรือใช้ชื่อผู้ใช้" */
+.divider {
+    position: relative;
+    text-align: center;
+    margin: 22px 0;
+}
+
+.divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border, #4a0d2a);
+}
+
+.divider span {
+    position: relative;
+    background: #18030f;
+    padding: 0 12px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-muted, #d8a8c4);
+    letter-spacing: 0.5px;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted, #d8a8c4);
+    margin-bottom: 7px;
+    letter-spacing: 0.5px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    font-size: 15px;
+    color: var(--text-muted, #d8a8c4);
+    pointer-events: none;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 13px 14px 13px 40px;
+    background: var(--input-bg, #12020b);
+    border: 1.5px solid var(--border, #4a0d2a);
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text-main, #ffffff);
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.input-wrapper input::placeholder {
+    color: #8a5c78;
+}
+
+.input-wrapper input:focus {
+    background: #19030f;
+    border-color: var(--primary, #ff1a75);
+    box-shadow: 0 0 0 3px rgba(255, 26, 117, 0.25);
+}
+
+/* ปุ่มเข้าสู่ระบบหลัก (ธีม Neon Magenta) */
+.btn-submit {
+    width: 100%;
+    background: var(--gradient-accent, linear-gradient(135deg, #ff1a75 0%, #e6005c 100%));
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 13px;
+    font-size: 15.5px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 8px;
+    box-shadow: 0 4px 16px rgba(255, 26, 117, 0.45);
+    transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+    background: linear-gradient(135deg, #ff4d94 0%, #ff1a75 100%);
+    box-shadow: 0 6px 22px rgba(255, 26, 117, 0.65);
+    transform: translateY(-1.5px);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+/* Footer */
+.card-footer {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--text-muted, #d8a8c4);
+}
+
+.card-footer a {
+    color: var(--primary, #ff1a75);
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.card-footer a:hover {
+    color: var(--primary-hover, #ff4d94);
+    text-shadow: 0 0 8px rgba(255, 26, 117, 0.6);
+    text-decoration: underline;
+}

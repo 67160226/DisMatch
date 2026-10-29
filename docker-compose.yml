@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@example.com
+      PGADMIN_DEFAULT_PASSWORD: mypassword
+    ports:
+      - "8080:80"
+    networks:
+      - app_network
+
+  fastapi_app:
+    build: .
+    container_name: fastapi_app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgresql://myuser:mypassword@postgres:5432/mydb
+    networks:
+      - app_network
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: always
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend/html:/usr/share/nginx/html:ro
+    depends_on:
+      - fastapi_app
+    networks:
+      - app_network
+
+volumes:
+  pgdata:
+
+networks:
+  app_network:
+    driver: bridge

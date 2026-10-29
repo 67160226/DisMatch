@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DishMatch | สุ่มเมนูอาหาร</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <main class="app-dashboard" id="page-dashboard">
+            
+            <!-- โลโก้และชื่อแอป DishMatch มุมซ้ายบน (.png) -->
+            <div class="app-brand-bar">
+                <div class="brand-logo-wrapper">
+                    <img src="Logo_Dishmatch.png" alt="DishMatch Logo" class="brand-logo-img">
+                    <span class="brand-title">DishMatch</span>
+                </div>
+            </div>
+
+            <!-- Header: แสดงชื่อและปุ่มออกระบบ -->
+            <header class="dashboard-header">
+                <div class="user-info">
+                    <span class="avatar">👋</span>
+                    <div>
+                        <p class="greeting">สวัสดี,</p>
+                        <h3 id="user-display">User</h3>
+                    </div>
+                </div>
+                <button onclick="handleLogout()" class="btn-logout">ออกจากระบบ</button>
+            </header>
+
+            <!-- ส่วนที่ 1: สุ่มอาหารแบบ CS:GO Case Opening -->
+            <section class="randomizer-card">
+                <h2>🎰 วันนี้กินอะไรดี?</h2>
+                <p class="subtitle">สุ่มเมนูอาหารแบบเปิดกล่องสกิน CS:GO!</p>
+                
+                <!-- CS:GO Roulette Track -->
+                <div class="csgo-wrapper">
+                    <div class="csgo-pointer"></div>
+                    <div class="csgo-track" id="csgo-track">
+                        <div class="csgo-item-placeholder">กดปุ่มด้านล่างเพื่อสุ่มเมนู! 📦</div>
+                    </div>
+                </div>
+
+                <div id="food-result" class="result-box" style="margin-bottom: 16px; min-height: 60px;">
+                    <span id="result-text" style="font-size: 20px; font-weight: bold;">พร้อมเปิดกล่องสุ่มแล้ว! 🍔</span>
+                </div>
+                
+                <button id="spin-btn" onclick="pickFood()" class="btn btn-warning btn-large">🔥 เปิดกล่องสุ่มเมนู!</button>
+            </section>
+
+            <!-- ส่วนที่ 2: Food Matcher (ปัดเลือกอาหารกับเพื่อน Tinder Style) -->
+            <section class="card">
+                <h2>🎮 Food Matcher (ปัดเลือกกับเพื่อน)</h2>
+                <p class="subtitle">สร้างห้องหรือใส่โค้ดเพื่อปัดเลือกเมนูที่อยากกินไปพร้อมกัน!</p>
+                
+                <div style="margin-bottom: 16px;">
+                    <button onclick="createNewRoom()" class="btn btn-warning btn-large">🔥 สร้างห้องใหม่</button>
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="join-code-input" placeholder="กรอกโค้ดห้องเพื่อน..." style="text-transform: uppercase;">
+                    <button onclick="joinRoom()" class="btn btn-dark" style="flex: 0 0 100px;">เข้าร่วม</button>
+                </div>
+            </section>
+
+            <!-- ส่วนที่ 3: จัดการเมนูอาหาร -->
+            <section class="manage-food-card">
+                <div class="add-food-wrapper">
+                    <input type="text" id="new-food-input" placeholder="เพิ่มเมนูใหม่ที่คุณอยากกิน..." autocomplete="off">
+                    <button onclick="handleAddFood()" class="btn btn-success" style="font-size: 24px; padding: 0 20px;">+</button>
+                </div>
+
+                <div class="food-list-header">
+                    <h3>รายการเมนูในระบบ</h3>
+                    <span id="food-count" class="badge">0 เมนู</span>
+                </div>
+                
+                <ul id="food-list" class="item-list"></ul>
+            </section>
+            
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

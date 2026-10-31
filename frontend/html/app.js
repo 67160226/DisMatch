@@ -3,20 +3,39 @@ const API_BASE_URL = 'https://dismatch.onrender.com';
 
 // ==================== 2. ระบบคลังรูปภาพอาหาร ====================
 const foodImageMap = {
-    'ข้าวมันไก่': 'https://images.unsplash.com/photo-1626804475297-41608e074eb1?w=800&auto=format&fit=crop',
-    'ก๋วยเตี๋ยว': 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800&auto=format&fit=crop',
-    'ผัดไทย': 'https://images.unsplash.com/photo-1559847844-5315695dadae?w=800&auto=format&fit=crop',
-    'ข้าวผัดกะเพราหมูสับ': 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&auto=format&fit=crop',
-    'ส้มตำไทย': 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&auto=format&fit=crop',
-    'ชาบู': 'https://images.unsplash.com/photo-1555126634-323283e090fa?w=800&auto=format&fit=crop',
-    'หมูกระทะ': 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop',
-    'พิซซ่า': 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&auto=format&fit=crop',
-    'เบอร์เกอร์': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&auto=format&fit=crop',
-    'ซูชิ': 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800&auto=format&fit=crop'
+    'ข้าวมันไก่': 'images/foods/ข้าวมันไก่.jpg',
+    'ข้าวมันไก่ทอด': 'images/foods/ข้าวมันไก่ทอด.jpg',
+    'ข้าวหมูกรอบ': 'images/foods/ข้าวหมูกรอบ.jpg',
+    'ข้าวหมูแดง': 'images/foods/ข้าวหมูแดง.jpg',
+    'ข้าวขาหมู': 'images/foods/ข้าวขาหมู.jpg',
+    'ข้าวผัดกะเพราหมูสับ': 'images/foods/ข้าวผัดกะเพราหมูสับ.jpg',
+    'ผัดกะเพราเนื้อ': 'images/foods/ผัดกะเพราเนื้อ.jpg',
+    'ข้าวผัดปู': 'images/foods/ข้าวผัดปู.jpg',
+    'ข้าวผัดไข่': 'images/foods/ข้าวผัดไข่.jpg',
+    'ข้าวคลุกกะปิ': 'images/foods/ข้าวคลุกกะปิ.jpg',
+    'ต้มยำกุ้ง': 'images/foods/ต้มยำกุ้ง.jpg',
+    'แกงเขียวหวานไก่': 'images/foods/แกงเขียวหวานไก่.jpg',
+    'ส้มตำไทย': 'images/foods/ส้มตำไทย.jpg',
+    'ส้มตำปูปลาร้า': 'images/foods/ส้มตำปูปลาร้า.jpg',
+    'ก๋วยเตี๋ยวเรือ': 'images/foods/ก๋วยเตี๋ยวเรือ.jpg',
+    'ผัดไทยกุ้งสด': 'images/foods/ผัดไทยกุ้งสด.jpg',
+    'ชาบู': 'images/foods/ชาบู.jpg',
+    'หมูกระทะ': 'images/foods/หมูกระทะ.jpg',
+    'พิซซ่า': 'images/foods/พิซซ่า.jpg',
+    'ซูชิ': 'images/foods/ซูชิ.jpg'
 };
 
 function getFoodImage(foodName) {
-    return foodImageMap[foodName] || `https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&auto=format&fit=crop`;
+    if (foodImageMap[foodName]) {
+        return foodImageMap[foodName];
+    }
+    // ค้นหาแบบบางส่วนหรือใช้รูปสำรอง
+    for (const key of Object.keys(foodImageMap)) {
+        if (foodName && (foodName.includes(key) || key.includes(foodName))) {
+            return foodImageMap[key];
+        }
+    }
+    return 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&auto=format&fit=crop';
 }
 
 // ==================== 3. ระบบยืนยันตัวตน (Auth Module) ====================
@@ -149,9 +168,8 @@ function pickFood() {
     for (let i = 0; i < totalItems; i++) {
         const foodName = (i === winnerIndex) ? winnerFood : foods[Math.floor(Math.random() * foods.length)];
         const rarity = Math.floor(Math.random() * 5);
-        itemsHtml += `<div class="csgo-item rarity-${rarity}" data-index="${i}">
-            <div style="font-size: 20px; margin-bottom: 4px;">🍽️</div>
-            <div style="font-size: 13px; line-height: 1.2;">${foodName}</div>
+        itemsHtml += `<div class="csgo-item rarity-${rarity}" data-index="${i}" style="background-image: url('${getFoodImage(foodName)}');">
+            <div class="csgo-item-title">${foodName}</div>
         </div>`;
     }
 
@@ -179,7 +197,36 @@ function pickFood() {
         }
 
         if (resultText) {
-            resultText.innerHTML = `🎉 วันนี้กิน: <span style="color: var(--primary, #ff1a75); font-weight: bold;">${winnerFood}</span>! 🍽️`;
+            const { mapsUrl, linemanUrl, grabUrl } = getNearbyLinks(winnerFood);
+            resultText.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; width: 100%; gap: 12px; margin-top: 6px;">
+                    <div style="font-size: 20px; font-weight: 800; color: #fff;">
+                        🎉 วันนี้กิน: <span style="color: var(--primary, #ff1a75);">${winnerFood}</span>! 🍽️
+                    </div>
+                    
+                    <div style="width: 100%; max-width: 260px; height: 160px; border-radius: 16px; background-image: url('${getFoodImage(winnerFood)}'); background-size: cover; background-position: center; border: 2px solid var(--border); box-shadow: 0 8px 25px rgba(0,0,0,0.6); position: relative; overflow: hidden;">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.85) 100%);"></div>
+                        <div style="position: absolute; bottom: 8px; left: 0; right: 0; color: #fff; font-weight: bold; font-size: 15px; text-shadow: 0 2px 5px rgba(0,0,0,0.9); text-align: center;">${winnerFood}</div>
+                    </div>
+
+                    <div style="width: 100%; margin-top: 4px;">
+                        <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" 
+                            style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #2563eb; color: #ffffff; text-decoration: none; padding: 10px 14px; border-radius: 12px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); margin-bottom: 8px;">
+                            🗺️ ร้านใกล้เคียง ม.บูรพา บางแสน บน Google Maps
+                        </a>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <a href="${linemanUrl}" target="_blank" rel="noopener noreferrer"
+                                style="display: flex; align-items: center; justify-content: center; gap: 6px; background: #00b900; color: #ffffff; text-decoration: none; padding: 9px 10px; border-radius: 10px; font-weight: 700; font-size: 12px; box-shadow: 0 3px 10px rgba(0, 185, 0, 0.3);">
+                                🟢 LINE MAN
+                            </a>
+                            <a href="${grabUrl}" target="_blank" rel="noopener noreferrer"
+                                style="display: flex; align-items: center; justify-content: center; gap: 6px; background: #00b14f; color: #ffffff; text-decoration: none; padding: 9px 10px; border-radius: 10px; font-weight: 700; font-size: 12px; box-shadow: 0 3px 10px rgba(0, 177, 79, 0.3);">
+                                🚗 GrabFood
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         if (spinBtn) {
@@ -207,17 +254,19 @@ function handleRandomFood() {
     }
 
     spinOverlay.innerHTML = `
-        <div class="match-content" style="text-align: center;">
+        <div class="match-content" style="text-align: center; max-height: 90vh; overflow-y: auto;">
             <div class="badge-match" style="background: #8b5cf6; color: #fff;">🎲 สุ่มเมนูอาหาร</div>
             <h1 class="match-heading" style="margin-top: 10px;">วันนี้กิน... 🎉</h1>
             
-            <div class="match-image-box" style="background-image: url('${getFoodImage(selectedFood)}'); margin: 20px auto;">
+            <div class="match-image-box" style="background-image: url('${getFoodImage(selectedFood)}'); margin: 16px auto; height: 180px;">
                 <div class="match-food-title">${selectedFood}</div>
             </div>
 
-            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 16px;">
-                <button class="btn btn-primary" onclick="handleRandomFood()" style="padding: 10px 20px; font-weight: bold;">สุ่มใหม่ 🔄</button>
-                <button class="btn btn-secondary" onclick="document.getElementById('spin-overlay').remove()" style="padding: 10px 20px; font-weight: bold;">ปิดหน้าต่าง ✕</button>
+            ${renderMatchActionButtons(selectedFood)}
+
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
+                <button class="btn btn-primary" onclick="handleRandomFood()" style="flex: 1; padding: 10px 14px; font-weight: bold; border-radius: 12px;">สุ่มใหม่ 🔄</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('spin-overlay').remove()" style="flex: 1; padding: 10px 14px; font-weight: bold; border-radius: 12px;">ปิดหน้าต่าง ✕</button>
             </div>
         </div>
     `;
@@ -353,6 +402,43 @@ function startMatchPolling() {
     }, 2000);
 }
 
+function getNearbyLinks(foodName) {
+    const query = encodeURIComponent(`${foodName} มหาวิทยาลัยบูรพา บางแสน`);
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+    const linemanUrl = `https://lineman.line.me/search?q=${encodeURIComponent(foodName)}`;
+    const grabUrl = `https://food.grab.com/th/th/restaurants?search=${encodeURIComponent(foodName)}`;
+    return { mapsUrl, linemanUrl, grabUrl };
+}
+
+function renderMatchActionButtons(foodName) {
+    const { mapsUrl, linemanUrl, grabUrl } = getNearbyLinks(foodName);
+    return `
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; text-align: left;">
+            <div style="font-size: 13px; font-weight: 700; color: #ff9f1a; display: flex; align-items: center; gap: 6px;">
+                📍 พิกัดร้านใกล้ ม.บูรพา บางแสน:
+            </div>
+            <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" 
+                style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #2563eb; color: #ffffff; text-decoration: none; padding: 12px 16px; border-radius: 14px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); transition: transform 0.2s;">
+                🗺️ ค้นหาร้านใกล้ที่สุดบน Google Maps
+            </a>
+            
+            <div style="font-size: 13px; font-weight: 700; color: #2ed573; margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+                🛵 กดสั่ง Delivery ทันที (จัดส่งถึง ม.บูรพา):
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <a href="${linemanUrl}" target="_blank" rel="noopener noreferrer"
+                    style="display: flex; align-items: center; justify-content: center; gap: 6px; background: #00b900; color: #ffffff; text-decoration: none; padding: 10px 12px; border-radius: 12px; font-weight: 700; font-size: 13px; box-shadow: 0 3px 10px rgba(0, 185, 0, 0.3);">
+                    🟢 LINE MAN
+                </a>
+                <a href="${grabUrl}" target="_blank" rel="noopener noreferrer"
+                    style="display: flex; align-items: center; justify-content: center; gap: 6px; background: #00b14f; color: #ffffff; text-decoration: none; padding: 10px 12px; border-radius: 12px; font-weight: 700; font-size: 13px; box-shadow: 0 3px 10px rgba(0, 177, 79, 0.3);">
+                    🚗 GrabFood
+                </a>
+            </div>
+        </div>
+    `;
+}
+
 function triggerMatch(foodName) {
     if (pollInterval) clearInterval(pollInterval);
     removeTopVoteShortcut();
@@ -369,17 +455,19 @@ function triggerMatch(foodName) {
     }
 
     matchOverlay.innerHTML = `
-        <div class="match-content">
+        <div class="match-content" style="max-height: 90vh; overflow-y: auto;">
             <div class="badge-match">MATCHED!</div>
             <h1 class="match-heading">IT'S A MATCH! 🎉</h1>
             <p class="match-sub">ทุกคนในห้องเลือกเมนูนี้เหมือนกันเป๊ะ!</p>
             
-            <div class="match-image-box" style="background-image: url('${getFoodImage(foodName)}')">
+            <div class="match-image-box" style="background-image: url('${getFoodImage(foodName)}'); height: 180px;">
                 <div class="match-food-title">${foodName}</div>
             </div>
 
-            <button class="btn btn-primary btn-large" onclick="window.location.href='dashboard.html'">
-                ไปกินกันเลย! 🍽️
+            ${renderMatchActionButtons(foodName)}
+
+            <button class="btn btn-secondary btn-large" style="width: 100%; border-radius: 14px;" onclick="window.location.href='dashboard.html'">
+                กลับหน้าหลัก 🏠
             </button>
         </div>
     `;
@@ -449,17 +537,19 @@ function triggerTopVoteMatch(foodName, likes) {
     }
 
     matchOverlay.innerHTML = `
-        <div class="match-content">
+        <div class="match-content" style="max-height: 90vh; overflow-y: auto;">
             <div class="badge-match" style="background: #fff3e0; color: #ff9f1a;">🏆 TOP VOTED MENU</div>
             <h1 class="match-heading">สรุปเมนูสุดฮิต! 🎉</h1>
             <p class="match-sub">เมนูนี้มียอดคนกดถูกใจมากที่สุด (${likes} เสียง)</p>
             
-            <div class="match-image-box" style="background-image: url('${getFoodImage(foodName)}')">
+            <div class="match-image-box" style="background-image: url('${getFoodImage(foodName)}'); height: 180px;">
                 <div class="match-food-title">${foodName}</div>
             </div>
 
-            <button class="btn btn-primary btn-large" onclick="window.location.href='dashboard.html'">
-                ไปกินกันเลย! 🍽️
+            ${renderMatchActionButtons(foodName)}
+
+            <button class="btn btn-secondary btn-large" style="width: 100%; border-radius: 14px;" onclick="window.location.href='dashboard.html'">
+                กลับหน้าหลัก 🏠
             </button>
         </div>
     `;

@@ -103,19 +103,24 @@ def generate_room_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
 def check_room_match(code: str, db: Session):
-    total_users = db.query(Vote.username).filter(Vote.room_code == code).distinct().count()
-    if total_users == 0:
+    # นับจำนวนสมาชิกจริงทั้งหมดที่อยู่ในห้อง (จากตาราง RoomMember)
+    total_members = db.query(RoomMember.username).filter(RoomMember.room_code == code).distinct().count()
+    
+    # ต้องมีสมาชิกในห้องอย่างน้อย 2 คนขึ้นไป ถึงจะเริ่มระบบจับคู่
+    if total_members < 2:
         return False, None
 
     foods = db.query(RoomFood).filter(RoomFood.room_code == code).all()
     for food in foods:
-        like_count = db.query(Vote).filter(
+        # นับจำนวนคนที่กดอยากกิน (is_like == True) ในเมนูนี้
+        like_count = db.query(Vote.username).filter(
             Vote.room_code == code,
             Vote.food_name == food.food_name,
             Vote.is_like == True
-        ).count()
+        ).distinct().count()
         
-        if like_count == total_users:
+        # แมตเฉพาะเมื่อทุกคนในห้อง (ครบ 100%) กดอยากกินเมนูนี้ตรงกัน
+        if like_count == total_members:
             return True, food.food_name
 
     return False, None
